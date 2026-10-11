@@ -19,11 +19,12 @@ class GameEngine:
         self.big_font = pygame.font.SysFont("monospace", 38, bold=True)
         self.reset()
 
+    
     def reset(self):
         self.walls = generate_maze(COLS, ROWS)
         self.player = Player(0, 0)
 
-        # Three enemies start at different corners.
+        # Three enemies at different corners
         self.enemies = [
             Enemy(ROWS - 1, COLS - 1),
             Enemy(0, COLS - 1),
@@ -37,23 +38,26 @@ class GameEngine:
             CELL - 10,
         )
 
-        # Place the power pellet away from the starting player.
+        # Power pellet, positioned away from the exit
+        pellet_row = ROWS // 2
+        pellet_col = COLS // 2 - 2
         self.pellet_rect = pygame.Rect(
-            (COLS // 2) * CELL + CELL // 2 - 7,
-            (ROWS // 2) * CELL + CELL // 2 - 7,
-            14, 14,
-        )
-        self.pellet_rect.center = (
-            CELL * (COLS // 2) + CELL // 2,
-            CELL * (ROWS // 2) + CELL // 2,
+            pellet_col * CELL + CELL // 2 - 7,
+            pellet_row * CELL + CELL // 2 - 7,
+            14,
+            14,
         )
         self.pellet_active = True
         self.freeze_until = 0
 
+        # Initialize all game state whenever the game resets
         self.start_time = pygame.time.get_ticks()
         self.score = 0
         self.caught = False
         self.won = False
+
+
+    
 
     def handle_events(self):
         for event in pygame.event.get():
